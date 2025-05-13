@@ -1,3 +1,4 @@
+import { ProfileForm } from '@/shared/components';
 import { ErrorText } from './error-text';
 import { Ingredient } from '@prisma/client';
 import { ProductsGroupList } from './products-group-list';
@@ -26,6 +27,10 @@ export { CheckoutSidebar } from './checkout-sidebar';
 export { ErrorText } from './error-text';
 export { RequiredSymbol } from './required-symbol';
 export { ClearButton } from './clear-button';
+export { ProfileButton } from './profile-button';
+export { InfoBlock } from './info-block';
+export { ProfileForm } from './profile-form';
+export { Stories } from './stories';
 export * from './email-temapltes';
 export * from './checkout';
 export * from './form';
