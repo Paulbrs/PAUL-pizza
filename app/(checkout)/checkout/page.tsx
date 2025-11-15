@@ -38,12 +38,17 @@ export default function CheckoutPage() {
 
     React.useEffect(() => {
       async function fetchUserInfo() {
-        const data = await Api.auth.getMe();
-        const [firstName, lastName ] = data.fullName.split(' ');
+        try {
+          const data = await Api.auth.getMe();
+          const [firstName, lastName ] = data.fullName.split(' ');
 
-        form.setValue('firstName', firstName);
-        form.setValue('lastName', lastName);
-        form.setValue('email', data.email);
+          form.setValue('firstName', firstName);
+          form.setValue('lastName', lastName);
+          form.setValue('email', data.email);
+        } catch (error) {
+          console.log('Error fetching user info:', error);
+          // Не показываем ошибку пользователю, просто не заполняем поля
+        }
       }
       
       if(session){
@@ -57,18 +62,31 @@ export default function CheckoutPage() {
 
         const url = await createOrder(data);
 
-        toast.error('Заказ успешно создан!📝Переход на оплату...', {
-          icon: '✅',
-        });
+        if (url) {
+          toast.success('Заказ успешно создан!📝Переход на оплату...', {
+            icon: '✅',
+          });
 
-        if (typeof url === "string" && url) {
-          location.href = url;
+          // Небольшая задержка для показа уведомления
+          setTimeout(() => {
+            location.href = url;
+          }, 1000);
+        } else {
+          toast.success('Заказ успешно создан!📝 (тестовый режим)', {
+            icon: '✅',
+          });
+          
+          // Перенаправляем на главную страницу
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 2000);
         }
+
       } catch (err) {
         console.log(err);
         setSubmitting(false);
         toast.error('Не удалось создать заказ', {
-        icon: '❌',
+          icon: '❌',
         });
       } 
     };

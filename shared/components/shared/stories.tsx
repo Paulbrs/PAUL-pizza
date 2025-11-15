@@ -5,7 +5,7 @@ import { IStory } from '@/shared/services/stories';
 import React from 'react';
 import { Container } from './container';
 import { cn } from '@/shared/lib/utils';
-import { X } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import ReactStories from 'react-insta-stories';
 
 interface Props {
@@ -16,6 +16,7 @@ export const Stories: React.FC<Props> = ({ className }) => {
   const [stories, setStories] = React.useState<IStory[]>([]);
   const [open, setOpen] = React.useState(false);
   const [selectedStory, setSelectedStory] = React.useState<IStory>();
+  const storiesRef = React.useRef<any>(null);
 
   React.useEffect(() => {
     async function fetchStories() {
@@ -25,6 +26,18 @@ export const Stories: React.FC<Props> = ({ className }) => {
 
     fetchStories();
   }, []);
+
+  React.useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
 
   const onClickStory = (story: IStory) => {
     setSelectedStory(story);
@@ -59,6 +72,20 @@ export const Stories: React.FC<Props> = ({ className }) => {
               <button className="absolute -right-10 -top-5 z-30" onClick={() => setOpen(false)}>
                 <X className="absolute top-0 right-0 w-8 h-8 text-white/50" />
               </button>
+
+              {/* Стрелка влево */}
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 z-40 pointer-events-none">
+                <div className="bg-primary rounded-full p-2">
+                  <ChevronLeft className="w-6 h-6 text-white" />
+                </div>
+              </div>
+
+              {/* Стрелка вправо */}
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 z-40 pointer-events-none">
+                <div className="bg-primary rounded-full p-2">
+                  <ChevronRight className="w-6 h-6 text-white" />
+                </div>
+              </div>
 
               <ReactStories
                 onAllStoriesEnd={() => setOpen(false)}

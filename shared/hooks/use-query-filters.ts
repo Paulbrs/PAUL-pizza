@@ -15,7 +15,6 @@ export const useQueryFilters = (filters: Filters) => {
           sizes: Array.from(filters.sizes),
           ingredients: Array.from(filters.selectedIngredients),
         };
-    
         {/* библиотека qs которая преобразует при клике новое URL*/}
         const query = qs.stringify(params, {
           arrayFormat: 'comma',

@@ -5,7 +5,7 @@ import { prisma } from "@/prisma/prisma-client";
 import { CheckoutFormValues } from "@/shared/constants";
 import { OrderStatus, Prisma } from "@prisma/client";
 import { cookies } from "next/headers";
-import { createPayment, sendEmail } from '@/shared/lib';
+import { createPayment, sendEmail, updateCartTotalAmount } from '@/shared/lib';
 import { PayOrderTemplate } from '@/shared/components';
 import { getUserSession } from '@/shared/lib/get-user-session';
 import { hashSync } from 'bcrypt';
@@ -86,13 +86,49 @@ export async function createOrder(data: CheckoutFormValues) {
         },
       });
 
+      // Принудительно обновляем totalAmount перед проверкой
+      if(userCart) {
+        await updateCartTotalAmount(cartToken);
+        // Получаем обновленную корзину
+        const updatedCart = await prisma.cart.findFirst({
+          include: {
+            user: true,
+            items: {
+              include: {
+                ingredients: true,
+                productItem: {
+                  include: {
+                    product: true,
+                  },
+                },
+              },
+            },
+          },
+          where: {
+            token: cartToken,
+          },
+        });
+        
+        // Используем обновленную корзину
+        Object.assign(userCart, updatedCart);
+      }
+
       // Если корзина не найдена - ошибка
       if(!userCart) {
         throw new Error('Cart not found');
       }
 
-      // Если корзина пустая - ошибка
-      if(userCart?.totalAmount === 0) {
+      // Проверяем есть ли товары в корзине
+      const hasItems = userCart.items && userCart.items.length > 0;
+      
+      // Если корзина пустая или нет товаров - ошибка
+      if(!hasItems || userCart?.totalAmount === 0) {
+        console.log('Cart debug:', {
+          hasItems,
+          totalAmount: userCart?.totalAmount,
+          itemsCount: userCart?.items?.length,
+          items: userCart?.items
+        });
         throw new Error('Cart is empty');
       }
 
@@ -145,9 +181,8 @@ export async function createOrder(data: CheckoutFormValues) {
         data: {
           paymentId: paymentData.id,
         }
-      })
+      });
 
-      // Перенаправление 
       const paymentUrl = paymentData.confirmation.confirmation_url;
 
 
@@ -164,6 +199,7 @@ export async function createOrder(data: CheckoutFormValues) {
       return paymentUrl;
     } catch (err) {
       console.log('{CreateOrder} Server error', err);
+      throw err; // Пробрасываем ошибку дальше
     }
 }
 

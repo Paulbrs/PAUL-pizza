@@ -16,15 +16,26 @@ const generateProductItem = ({
     pizzaType?: 1 | 2;
     size?: 20 | 30 | 40; 
 }) => {
-    // Базовая цена для маленькой пиццы
-    const basePrice = randomNumber(190, 250);
-    
-    // Множитель в зависимости от размера
-    const sizeMultiplier = size === 20 ? 1 : size === 30 ? 1.5 : 2;
-    
+    // Если указаны размеры — это пицца. Для пицц ограничиваем цены 20–40.
+    // Распределим по диапазонам в зависимости от размера:
+    // 20 см → 20–25, 30 см → 26–35, 40 см → 36–40
+    let price: number;
+    if (size) {
+        if (size === 20) {
+            price = Math.round(randomNumber(20, 25));
+        } else if (size === 30) {
+            price = Math.round(randomNumber(26, 35));
+        } else {
+            price = Math.round(randomNumber(36, 40));
+        }
+    } else {
+        // Прочие категории (завтрак, закуски, коктейли, напитки): 7–15
+        price = Math.round(randomNumber(7, 15));
+    }
+
     return {
         productId,
-        price: Math.round(basePrice * sizeMultiplier),
+        price,
         pizzaType,
         size,
     } as Prisma.ProductItemUncheckedCreateInput;
@@ -219,6 +230,31 @@ async function up() {
             sourceUrl:
               'https://cdn.inappstory.ru/file/sy/vl/c7/uyqzmdojadcbw7o0a35ojxlcul.webp?k=IgAAAAAAAAAE',
           },
+          // StoryId 2 - Узнали себя
+            {
+                storyId: 2,
+                sourceUrl: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=600'
+            },
+            // StoryId 3 - Подборка специально для вас
+            {
+                storyId: 3,
+                sourceUrl: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600'
+            },
+            // StoryId 4 - Факт месяца
+            {
+                storyId: 4,
+                sourceUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600'
+            },
+            // StoryId 5 - Кофе со вкусом
+            {
+                storyId: 5,
+                sourceUrl: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600'
+            },
+            // StoryId 6 - Без мяса
+            {
+                storyId: 6,
+                sourceUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600'
+            }
         ],
     });
 } 
@@ -231,6 +267,8 @@ async function down() {
     await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`; 
     await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE`; 
     await prisma.$executeRaw`TRUNCATE TABLE "ProductItem" RESTART IDENTITY CASCADE`; 
+    await prisma.$executeRaw`TRUNCATE TABLE "Story" RESTART IDENTITY CASCADE`; 
+    await prisma.$executeRaw`TRUNCATE TABLE "StoryItem" RESTART IDENTITY CASCADE`; 
 } // очищение
 
 async function main() {
