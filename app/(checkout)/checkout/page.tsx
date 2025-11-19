@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -19,7 +20,7 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import { Api } from "@/shared/services/api-client";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
     const [ submitting, setSubmitting ] = React.useState(false);
     const { totalAmount, updateItemQuantity, items, removeCartItem, loading } = useCart();
     const { data: session } = useSession();
@@ -47,13 +48,12 @@ export default function CheckoutPage() {
           form.setValue('email', data.email);
         } catch (error) {
           console.log('Error fetching user info:', error);
-          // Не показываем ошибку пользователю, просто не заполняем поля
         }
       }
       
       if(session){
         fetchUserInfo();
-      };
+      }
     }, [session]);
 
     const onSubmit = async (data: CheckoutFormValues) => {
@@ -67,7 +67,6 @@ export default function CheckoutPage() {
             icon: '✅',
           });
 
-          // Небольшая задержка для показа уведомления
           setTimeout(() => {
             location.href = url;
           }, 1000);
@@ -75,8 +74,7 @@ export default function CheckoutPage() {
           toast.success('Заказ успешно создан!📝 (тестовый режим)', {
             icon: '✅',
           });
-          
-          // Перенаправляем на главную страницу
+
           setTimeout(() => {
             window.location.href = '/';
           }, 2000);
@@ -96,15 +94,13 @@ export default function CheckoutPage() {
       updateItemQuantity(id, newQuantity);
     };
 
-
     return (
       <Container className="mt-5">
-        <Title text='Оформление заказа' className='font-extrabold mb-8 text-[36px]'/>
+        <Title text='Оформление заказа' className='font-extrabold mb-8 text-[36px]' />
 
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex gap-10">
-              {/* Левая часть */}
               <div className="flex flex-col gap-10 flex-1 mb-20">
                 <CheckoutCart 
                   onClickCountButton={onClickCountButton}
@@ -113,12 +109,10 @@ export default function CheckoutPage() {
                   loading={loading}
                 />
 
-                <CheckoutPersonalForm  className={loading ? 'opacity-40 pointer-events-none' : ''} />
- 
-                <CheckoutAddressForm   className={loading ? 'opacity-40 pointer-events-none' : ''} />
+                <CheckoutPersonalForm className={loading ? 'opacity-40 pointer-events-none' : ''} />
+                <CheckoutAddressForm className={loading ? 'opacity-40 pointer-events-none' : ''} />
               </div>
 
-              {/* Правая часть */}
               <div className="w-[450px]">
                 <CheckoutSidebar 
                   totalAmount={totalAmount} 
@@ -129,5 +123,13 @@ export default function CheckoutPage() {
           </form>
         </FormProvider>
       </Container>
-    )
+    );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<div>Loading…</div>}>
+      <CheckoutContent />
+    </Suspense>
+  );
 }
