@@ -37,13 +37,13 @@ export const Filters: React.FC<Props> = ({ className }) => {
   
   return (
     <div className={className}>
-      <Title text='Фильтрация' size='sm' className='mb-5 font-bold' />
+      <Title text='Фильтрация' size='sm' className='mb-3 sm:mb-4 lg:mb-5 font-bold' />
       
       {/* Верхние чекбоксы */}
       <CheckboxFiltersGroup 
         title='Тип теста'
         name='sizes'
-        className='mb-5'
+        className='mb-4 sm:mb-5'
         items={[
           { text: 'Тонкое', value: '1' },
           { text: 'Традиционное', value: '2' },
@@ -55,7 +55,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
       <CheckboxFiltersGroup 
         title='Размеры'
         name='sizes'
-        className='mb-5'
+        className='mb-4 sm:mb-5'
         items={[
           { text: '20 см', value: '20' },
           { text: '30 см', value: '30' },
@@ -71,9 +71,9 @@ export const Filters: React.FC<Props> = ({ className }) => {
       </div> */}
 
       {/* Фильтр цены */}
-      <div className='mt-5 border-y border-y-neutral-100 py-6 pb-7'>
-        <p className='font-bold mb-3'>Цена от и до:</p>
-        <div className='flex gap-3 mb-5'>
+      <div className='mt-4 sm:mt-5 border-y border-y-neutral-100 py-4 sm:py-5 lg:py-6 pb-5 sm:pb-6 lg:pb-7'>
+        <p className='font-bold mb-2 sm:mb-3 text-sm sm:text-base'>Цена от и до:</p>
+        <div className='flex gap-2 sm:gap-3 mb-4 sm:mb-5'>
           <Input 
             type='number' 
             placeholder='0' 
@@ -104,7 +104,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
       <CheckboxFiltersGroup 
         title='Ингредиенты'
         name='ingredients'
-        className='mt-5'
+        className='mt-4 sm:mt-5'
         limit={8}
         defaultItems={items.slice(0, 8)}
         items={items} 

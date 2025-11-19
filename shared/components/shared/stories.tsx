@@ -49,7 +49,8 @@ export const Stories: React.FC<Props> = ({ className }) => {
 
   return (
     <>
-      <Container className={cn('flex items-center justify-between gap-2 my-10', className)}>
+      {/* Desktop: обычная сетка */}
+      <Container className={cn('hidden lg:flex items-center justify-between gap-2 my-8 lg:my-10', className)}>
         {stories.length === 0 &&
           [...Array(6)].map((_, index) => (
             <div key={index} className="w-[200px] h-[250px] bg-gray-200 rounded-md animate-pulse" />
@@ -63,8 +64,28 @@ export const Stories: React.FC<Props> = ({ className }) => {
             height={250}
             width={200}
             src={story.previewImageUrl}
+            alt="Story preview"
           />
         ))}
+
+
+      {/* Мобильные и планшеты: горизонтальный скролл, видно 3 превью */}
+      <Container className={cn('flex lg:hidden flex-nowrap gap-3 overflow-x-auto scrollbar-hide my-6 sm:my-8 px-2', className)}>
+        {stories.length === 0 &&
+          [...Array(6)].map((_, index) => (
+            <div key={index} className="inline-block min-w-[140px] h-[185px] bg-gray-200 rounded-md animate-pulse flex-shrink-0" />
+          ))}
+
+        {stories.map((story) => (
+          <img
+            key={story.id}
+            onClick={() => onClickStory(story)}
+            className="rounded-md cursor-pointer inline-block min-w-[140px] h-[185px] object-cover flex-shrink-0"
+            src={story.previewImageUrl}
+            alt="Story preview"
+          />
+        ))}
+      </Container>
 
         {open && (
           <div className="absolute left-0 top-0 w-full h-full bg-black/80 flex items-center justify-center z-30">

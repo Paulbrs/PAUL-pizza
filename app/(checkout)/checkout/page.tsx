@@ -95,13 +95,13 @@ function CheckoutContent() {
     };
 
     return (
-      <Container className="mt-5">
-        <Title text='Оформление заказа' className='font-extrabold mb-8 text-[36px]' />
+      <Container className="mt-5 sm:mt-8 lg:mt-10">
+        <Title text='Оформление заказа' className='font-extrabold mb-5 sm:mb-6 lg:mb-8 text-2xl sm:text-3xl lg:text-[36px]' />
 
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="flex gap-10">
-              <div className="flex flex-col gap-10 flex-1 mb-20">
+            <div className="flex flex-col lg:flex-row gap-5 sm:gap-8 lg:gap-10">
+              <div className="flex flex-col gap-5 sm:gap-8 lg:gap-10 flex-1 mb-10 sm:mb-16 lg:mb-20">
                 <CheckoutCart 
                   onClickCountButton={onClickCountButton}
                   removeCartItem={removeCartItem}
@@ -113,7 +113,7 @@ function CheckoutContent() {
                 <CheckoutAddressForm className={loading ? 'opacity-40 pointer-events-none' : ''} />
               </div>
 
-              <div className="w-[450px]">
+              <div className="w-full lg:w-[450px] lg:flex-shrink-0">
                 <CheckoutSidebar 
                   totalAmount={totalAmount} 
                   loading={loading || submitting}
