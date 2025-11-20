@@ -260,16 +260,18 @@ async function up() {
 } 
 
 async function down() {
-    await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`; 
-    await prisma.$executeRaw`TRUNCATE TABLE "Category" RESTART IDENTITY CASCADE`; 
-    await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE`; 
-    await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE`; 
-    await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`; 
-    await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE`; 
-    await prisma.$executeRaw`TRUNCATE TABLE "ProductItem" RESTART IDENTITY CASCADE`; 
-    await prisma.$executeRaw`TRUNCATE TABLE "Story" RESTART IDENTITY CASCADE`; 
-    await prisma.$executeRaw`TRUNCATE TABLE "StoryItem" RESTART IDENTITY CASCADE`; 
-} // очищение
+    await prisma.storyItem.deleteMany({});
+    await prisma.story.deleteMany({});
+    await prisma.productItem.deleteMany({});
+    await prisma.product.deleteMany({});
+    await prisma.ingredient.deleteMany({});
+    await prisma.cartItem.deleteMany({});
+    await prisma.cart.deleteMany({});
+    await prisma.category.deleteMany({});
+    await prisma.verificationCode.deleteMany({});
+    await prisma.order.deleteMany({});
+    await prisma.user.deleteMany({});
+}// очищение
 
 async function main() {
     try {
