@@ -55,9 +55,9 @@ export const ProductsGroupList: React.FC<Props> = ({
     </div>
 
     {/* Мобильные и планшеты: горизонтальный скролл */}
-    <div className={cn('flex lg:hidden flex-nowrap gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 px-2', listClassName)}>
+    <div className={cn('flex lg:hidden flex-nowrap gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 sm:-mx-6 px-2 sm:px-6', listClassName)}>
         {items.map((product, i) => (
-            <div key={product.id} className="inline-block min-w-[240px] sm:min-w-[280px] max-w-[80vw] flex-shrink-0">
+            <div key={product.id} className="inline-block min-w-[180px] sm:min-w-[220px] md:min-w-[260px] flex-shrink-0">
                 <ProductCard 
                     id={product.id}
                     name={product.name}
@@ -67,6 +67,8 @@ export const ProductsGroupList: React.FC<Props> = ({
                 />
             </div>
         ))}
+        {/* Отступ справа для последнего элемента */}
+        <div className="flex-shrink-0 w-2 sm:w-4"></div>
     </div>
   </div>
   )

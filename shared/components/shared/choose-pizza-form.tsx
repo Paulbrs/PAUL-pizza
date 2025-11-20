@@ -44,16 +44,31 @@ export const ChoosePizzaForm: React.FC<Props> = ({
       }
     }
 
-    
   return (
-    <div className={cn(className, 'flex flex-1')}>
-      <PizzaImage imageUrl={imageUrl} size={size} />
+    <div className={cn(className, 'flex flex-col lg:flex-row flex-1')}>
+      {/* Изображение пиццы */}
+      <div className='flex items-center justify-center p-3 sm:p-4 md:p-5 lg:p-0 lg:flex-1'>
+        <PizzaImage imageUrl={imageUrl} size={size} />
+      </div>
 
-      <div className=' w-[490px] bg-[#f0efef93] p-7'>
-        <Title text={name} size='md' className='font-extrabold mb-1' />
-        <p className='text-gray-400'>{textDetaills}</p>
+      {/* Контент */}
+      <div className='w-full lg:w-[490px] bg-[#f0efef93] p-4 sm:p-5 md:p-6 lg:p-7 flex flex-col'>
+        {/* Название */}
+        <Title text={name} size='md' className='font-extrabold mb-2 sm:mb-3' />
         
-        <div className='text-flex-col gap-5 mt-5'>
+        {/* Описание - только на мобильных и iPad */}
+        <div className='lg:hidden mb-3'>
+          <h3 className='font-bold text-gray-800 mb-1.5 text-sm md:text-base'>Описание</h3>
+          <p className='text-gray-600 text-xs md:text-sm leading-relaxed'>
+            Классическая пицца с пепперони и моцареллой. Острый вкус и аромат итальянской кухни.
+          </p>
+        </div>
+
+        {/* Детали размера и типа */}
+        <p className='text-gray-400 text-sm sm:text-base md:text-base mb-3 lg:mb-0'>{textDetaills}</p>
+        
+        {/* Варианты размера и типа */}
+        <div className='flex flex-col gap-3 sm:gap-4 md:gap-4 mt-3 lg:mt-5'>
           <GroupVariants 
             items={availableSizes} 
             value={String(size)} 
@@ -67,27 +82,33 @@ export const ChoosePizzaForm: React.FC<Props> = ({
           />
         </div>
 
-        <div className='bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar'>
+        {/* Ингредиенты для выбора - скрываем на мобильных и iPad, показываем на десктопе */}
+        <div className='hidden lg:block bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5'>
           <div className='grid grid-cols-3 gap-3'>
-            {ingredients.map((ingredients) => (
+            {ingredients.map((ingredient) => (
               <IngredientItem 
-                key={ingredients.id}
-                imageUrl={ingredients.imageUrl}
-                name={ingredients.name}
-                price={ingredients.price}
-                onClick={() => addIngredient(ingredients.id)}
-                active={selectedIngredients.has(ingredients.id)}
+                key={ingredient.id}
+                imageUrl={ingredient.imageUrl}
+                name={ingredient.name}
+                price={ingredient.price}
+                onClick={() => addIngredient(ingredient.id)}
+                active={selectedIngredients.has(ingredient.id)}
               />
             ))}
           </div>
         </div>
 
-        <Button 
-          loading={loading}
-          onClick={handleClickAdd} 
-          className='h-[55px] px-10 text-base rounded-[18px] w-full mt-[-10px]'>
-          Добавить в корзину за {totalPrice} Br
-        </Button>
+        {/* Кнопка добавления */}
+        <div className='mt-auto pt-3 lg:pt-0 lg:mt-[-10px]'>
+          <Button 
+            loading={loading}
+            onClick={handleClickAdd} 
+            className='h-[48px] sm:h-[50px] md:h-[52px] lg:h-[55px] px-6 sm:px-10 text-sm sm:text-base rounded-[18px] w-full'>
+            <span className='hidden sm:inline'>Добавить в корзину за </span>
+            <span className='sm:hidden'>В корзину за </span>
+            {totalPrice} Br
+          </Button>
+        </div>
       </div>
   </div>
   ); 
