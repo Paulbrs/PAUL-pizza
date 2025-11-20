@@ -1,8 +1,5 @@
 import { PaymentCallbackData } from "@/@types/yookassa";
 import { prisma } from "@/prisma/prisma-client";
-import { OrderSuccessTemplate } from "@/shared/components/shared/email-temapltes/order-success";
-import { sendEmail } from "@/shared/lib";
-import { CartItemDTO } from "@/shared/services/dto/cart.dto";
 import { OrderStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -30,22 +27,6 @@ export async function POST(req: NextRequest) {
             status: isSucceeded ? OrderStatus.SUCCEEDED : OrderStatus.CANCELLED,
         },
       });
-      
-      const items = JSON.parse(order?.items as string) as CartItemDTO[];
-
-      if(isSucceeded) {
-        await sendEmail(
-        order.email,
-        'Paul Pizza | Ваш заказ успешно оформлен !!!',
-        OrderSuccessTemplate({ orderId: order.id, items }),
-        );
-      } else {
-        await sendEmail(
-          order.email,
-          'Paul Pizza | Ваш заказ НЕ  оформлен, попробуйте ещё раз !!!',
-          OrderSuccessTemplate({ orderId: order.id, items }),
-        );
-      }
 
     } catch (error) {
         console.log('[Checkout Callback] Error:', error);

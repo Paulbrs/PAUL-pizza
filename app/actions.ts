@@ -1,15 +1,12 @@
 'use server';
 
-import second from 'resend';
 import { prisma } from "@/prisma/prisma-client";
 import { CheckoutFormValues } from "@/shared/constants";
 import { OrderStatus, Prisma } from "@prisma/client";
 import { cookies } from "next/headers";
-import { createPayment, sendEmail, updateCartTotalAmount } from '@/shared/lib';
-import { PayOrderTemplate } from '@/shared/components';
+import { createPayment, updateCartTotalAmount } from '@/shared/lib';
 import { getUserSession } from '@/shared/lib/get-user-session';
 import { hashSync } from 'bcrypt';
-import { VerificationUserTemplate } from '@/shared/components/shared/email-temapltes/verification-user';
 
 export async function registerUser(body: Prisma.UserCreateInput) {
   try {
@@ -20,37 +17,17 @@ export async function registerUser(body: Prisma.UserCreateInput) {
     });
 
     if (user) {
-      if (!user.verified) {
-        throw new Error('Почта не подтверждена');
-      }
-
       throw new Error('Пользователь уже существует');
     }
 
-    const createdUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         fullName: body.fullName,
         email: body.email,
         password: hashSync(body.password, 10),
+        verified: new Date(), // Автоматически верифицируем пользователя
       },
     });
-
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-
-    await prisma.verificationCode.create({
-      data: {
-        code,
-        userId: createdUser.id,
-      },
-    });
-
-    await sendEmail(
-      createdUser.email,
-      'Paul Pizza | 📝 Подтверждение регистрации',
-      VerificationUserTemplate({
-        code,
-      })
-    )
   } catch (error) {
     console.log('Error [CREATE_USER]', error);
     throw error;
@@ -184,17 +161,6 @@ export async function createOrder(data: CheckoutFormValues) {
       });
 
       const paymentUrl = paymentData.confirmation.confirmation_url;
-
-
-      // Отправляем письмо
-      await sendEmail(
-        data.email, 'Paul Pizza / Оплатите заказ #' + order.id, 
-        PayOrderTemplate({
-          orderId: order.id,
-          totalAmount: order.totalAmount,
-          paymentUrl,
-        }),
-      );
 
       return paymentUrl;
     } catch (err) {

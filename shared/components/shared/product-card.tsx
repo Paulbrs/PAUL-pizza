@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
 import { Title } from './title';
@@ -5,6 +7,8 @@ import { Button } from '../ui';
 import { Plus } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Ingredient } from '@prisma/client';
+import { useCartStore } from '@/shared/store/cart';
+import toast from 'react-hot-toast';
 
 interface Props {
   id: number;
@@ -12,13 +16,39 @@ interface Props {
   price: number;
   imageUrl: string;
   ingredients: Ingredient[];
+  productItemId?: number; // ID первого элемента продукта для быстрого добавления
   className?: string;
 }
 
-export const ProductCard: React.FC<Props> = ({ id, name, price, imageUrl, ingredients, className }) => {
+export const ProductCard: React.FC<Props> = ({ id, name, price, imageUrl, ingredients, productItemId, className }) => {
+  const addCartItem = useCartStore(state => state.addCartItem);
+  const loading = useCartStore(state => state.loading);
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!productItemId) {
+      // Если нет productItemId, переходим на страницу продукта
+      window.location.href = `/product/${id}`;
+      return;
+    }
+
+    try {
+      await addCartItem({
+        productItemId,
+        ingredients: [],
+      });
+      toast.success(name + ' добавлена в корзину');
+    } catch (err) {
+      toast.error('Не удалось добавить ' + name + ' в корзину');
+      console.log(err);
+    }
+  };
+
   return (
     <div className={cn(className)}>
-        <Link href={`/product/${id}`}>
+        <Link href={`/product/${id}`} className='block'>
             <div className='flex justify-center p-4 sm:p-5 lg:p-6 bg-secondary rounded-lg h-[200px] sm:h-[220px] lg:h-[260px]'>
                 <img className="w-[160px] h-[160px] sm:w-[180px] sm:h-[180px] lg:w-[215px] lg:h-[215px]" src={imageUrl} alt={name} />
             </div>
@@ -31,20 +61,24 @@ export const ProductCard: React.FC<Props> = ({ id, name, price, imageUrl, ingred
                 ingredient.name).join(',')
               }
             </p>
+        </Link>
 
             <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mt-3 sm:mt-4'>
                 <span className='text-base sm:text-lg lg:text-[20px]'>
                     от <b>{price} Br</b>
                 </span>
 
-            <Button variant="secondary" className='text-sm sm:text-base font-bold w-full sm:w-auto'>
+            <Button 
+              variant="secondary" 
+              className='text-sm sm:text-base font-bold w-full sm:w-auto lg:w-auto'
+              onClick={handleAddToCart}
+              loading={loading}
+              disabled={loading}
+            >
                 <Plus size={18} className='sm:size-5 mr-1'/>
-                    Добавить
+                Добавить
             </Button>                
-            
-            
             </div>
-        </Link>
     </div>
   );
 };

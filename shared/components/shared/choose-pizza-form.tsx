@@ -45,7 +45,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
     }
 
   return (
-    <div className={cn(className, 'flex flex-col lg:flex-row flex-1')}>
+    <div className={cn(className, 'flex flex-col h-full pb-24 lg:flex-row flex-1')}>
       {/* Изображение пиццы */}
       <div className='flex items-center justify-center p-3 sm:p-4 md:p-5 lg:p-0 lg:flex-1'>
         <PizzaImage imageUrl={imageUrl} size={size} />
@@ -83,7 +83,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
         </div>
 
         {/* Ингредиенты для выбора - скрываем на мобильных и iPad, показываем на десктопе */}
-        <div className='hidden lg:block bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5'>
+        <div className='hidden lg:block bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5  mb-6'>
           <div className='grid grid-cols-3 gap-3'>
             {ingredients.map((ingredient) => (
               <IngredientItem 
@@ -99,7 +99,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
         </div>
 
         {/* Кнопка добавления */}
-        <div className='mt-auto pt-3 lg:pt-0 lg:mt-[-10px]'>
+        <div className='mt-auto pt-3 lg:pt-0 lg:sticky lg:bottom-0 bg-[#f0efef93]'>
           <Button 
             loading={loading}
             onClick={handleClickAdd} 

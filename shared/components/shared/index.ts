@@ -32,7 +32,6 @@ export { InfoBlock } from './info-block';
 export { ProfileForm } from './profile-form';
 export { Stories } from './stories';
 export { Footer } from './footer';
-export * from './email-temapltes';
 export * from './checkout';
 export * from './form';
 export * from './modals';
