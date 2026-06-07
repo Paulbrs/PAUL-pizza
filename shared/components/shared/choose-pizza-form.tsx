@@ -45,14 +45,14 @@ export const ChoosePizzaForm: React.FC<Props> = ({
     }
 
   return (
-    <div className={cn(className, 'flex flex-col h-full pb-24 lg:flex-row flex-1')}>
+    <div className={cn(className, 'flex min-h-0 flex-1 flex-col lg:min-h-[500px] lg:flex-row')}>
       {/* Изображение пиццы */}
-      <div className='flex items-center justify-center p-3 sm:p-4 md:p-5 lg:p-0 lg:flex-1'>
+      <div className='flex items-center justify-center p-3 sm:p-4 md:p-5 lg:min-w-0 lg:flex-1 lg:p-0'>
         <PizzaImage imageUrl={imageUrl} size={size} />
       </div>
 
       {/* Контент */}
-      <div className='w-full lg:w-[490px] bg-[#f0efef93] p-4 sm:p-5 md:p-6 lg:p-7 flex flex-col'>
+      <div className='flex w-full flex-col bg-[#f0efef93] p-4 sm:p-5 md:p-6 lg:w-[440px] lg:p-6 xl:w-[490px] xl:p-7'>
         {/* Название */}
         <Title text={name} size='md' className='font-extrabold mb-2 sm:mb-3' />
         
@@ -83,7 +83,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
         </div>
 
         {/* Ингредиенты для выбора - скрываем на мобильных и iPad, показываем на десктопе */}
-        <div className='hidden lg:block bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5  mb-6'>
+        <div className='hidden lg:block bg-gray-50 p-5 rounded-md h-[360px] xl:h-[420px] overflow-auto scrollbar mt-5 mb-6'>
           <div className='grid grid-cols-3 gap-3'>
             {ingredients.map((ingredient) => (
               <IngredientItem 
@@ -99,7 +99,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
         </div>
 
         {/* Кнопка добавления */}
-        <div className='mt-auto pt-3 lg:pt-0 lg:sticky lg:bottom-0 bg-[#f0efef93]'>
+        <div className='mt-auto bg-[#f0efef93] pt-3 lg:sticky lg:bottom-0 lg:pt-0'>
           <Button 
             loading={loading}
             onClick={handleClickAdd} 

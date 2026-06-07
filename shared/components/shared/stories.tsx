@@ -67,7 +67,7 @@ export const Stories: React.FC<Props> = ({ className }) => {
             alt="Story preview"
           />
         ))}
-
+      </Container>
 
       {/* Мобильные и планшеты: горизонтальный скролл, видно 3 превью */}
       <Container className={cn('flex lg:hidden flex-nowrap gap-3 overflow-x-auto scrollbar-hide my-6 sm:my-8 px-2', className)}>
@@ -87,38 +87,37 @@ export const Stories: React.FC<Props> = ({ className }) => {
         ))}
       </Container>
 
-        {open && (
-          <div className="absolute left-0 top-0 w-full h-full bg-black/80 flex items-center justify-center z-30">
-            <div className="relative" style={{ width: 400 }}>
-              <button className="absolute -right-10 -top-5 z-30" onClick={() => setOpen(false)}>
-                <X className="absolute top-0 right-0 w-8 h-8 text-white/50" />
-              </button>
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4">
+          <div className="relative w-full max-w-[400px]">
+            <button className="absolute right-0 -top-10 z-30" onClick={() => setOpen(false)}>
+              <X className="w-8 h-8 text-white/50" />
+            </button>
 
-              {/* Стрелка влево */}
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 z-40 pointer-events-none">
-                <div className="bg-primary rounded-full p-2">
-                  <ChevronLeft className="w-6 h-6 text-white" />
-                </div>
+            {/* Стрелка влево */}
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 z-40 pointer-events-none">
+              <div className="bg-primary rounded-full p-2">
+                <ChevronLeft className="w-6 h-6 text-white" />
               </div>
-
-              {/* Стрелка вправо */}
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 z-40 pointer-events-none">
-                <div className="bg-primary rounded-full p-2">
-                  <ChevronRight className="w-6 h-6 text-white" />
-                </div>
-              </div>
-
-              <ReactStories
-                onAllStoriesEnd={() => setOpen(false)}
-                stories={selectedStory?.items.map((item) => ({ url: item.sourceUrl })) || []}
-                defaultInterval={3000}
-                width={400}
-                height={600}
-              />
             </div>
+
+            {/* Стрелка вправо */}
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 z-40 pointer-events-none">
+              <div className="bg-primary rounded-full p-2">
+                <ChevronRight className="w-6 h-6 text-white" />
+              </div>
+            </div>
+
+            <ReactStories
+              onAllStoriesEnd={() => setOpen(false)}
+              stories={selectedStory?.items.map((item) => ({ url: item.sourceUrl })) || []}
+              defaultInterval={3000}
+              width="100%"
+              height={600}
+            />
           </div>
-        )}
-      </Container>
+        </div>
+      )}
     </>
   );
 };

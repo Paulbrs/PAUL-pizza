@@ -41,7 +41,7 @@ export const ProductsGroupList: React.FC<Props> = ({
     <Title text={title} size="lg" className="font-extrabold mb-3 sm:mb-4 lg:mb-5" />
 
     {/* Desktop: grid 3 колонки */}
-    <div className={cn('hidden lg:grid grid-cols-3 gap-[50px]', listClassName)}>
+    <div className={cn('hidden xl:grid grid-cols-3 gap-[50px]', listClassName)}>
         {items.map((product, i) => {
           // Для пицц находим первый доступный item с дефолтными значениями (20 см, тип 1)
           const isPizza = product.items[0]?.pizzaType !== null && product.items[0]?.pizzaType !== undefined;
@@ -64,7 +64,7 @@ export const ProductsGroupList: React.FC<Props> = ({
     </div>
 
     {/* Мобильные и планшеты: горизонтальный скролл */}
-    <div className={cn('flex lg:hidden flex-nowrap gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 sm:-mx-6 px-2 sm:px-6', listClassName)}>
+    <div className={cn('flex xl:hidden flex-nowrap gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-2 sm:-mx-6 px-2 sm:px-6', listClassName)}>
         {items.map((product, i) => {
           // Для пицц находим первый доступный item с дефолтными значениями (20 см, тип 1)
           const isPizza = product.items[0]?.pizzaType !== null && product.items[0]?.pizzaType !== undefined;
@@ -73,8 +73,9 @@ export const ProductsGroupList: React.FC<Props> = ({
             : product.items[0];
           
           return (
-            <div key={product.id} className="inline-block min-w-[180px] sm:min-w-[220px] md:min-w-[260px] flex-shrink-0">
+            <div key={product.id} className="w-[180px] min-w-[180px] sm:w-[220px] sm:min-w-[220px] md:w-[260px] md:min-w-[260px] flex-shrink-0">
                 <ProductCard 
+                    className="w-full"
                     id={product.id}
                     name={product.name}
                     imageUrl={product.imageUrl}

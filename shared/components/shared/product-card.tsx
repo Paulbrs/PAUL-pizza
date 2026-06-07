@@ -47,15 +47,15 @@ export const ProductCard: React.FC<Props> = ({ id, name, price, imageUrl, ingred
   };
 
   return (
-    <div className={cn(className)}>
+    <div className={cn('min-w-0', className)}>
         <Link href={`/product/${id}`} className='block'>
             <div className='flex justify-center p-4 sm:p-5 lg:p-6 bg-secondary rounded-lg h-[200px] sm:h-[220px] lg:h-[260px]'>
                 <img className="w-[160px] h-[160px] sm:w-[180px] sm:h-[180px] lg:w-[215px] lg:h-[215px]" src={imageUrl} alt={name} />
             </div>
 
-            <Title text={name} size='sm' className='mb-1 mt-2 sm:mt-3 font-bold' />
+            <Title text={name} size='sm' className='mb-1 mt-2 sm:mt-3 font-bold line-clamp-2' />
             
-            <p className='text-xs sm:text-sm text-gray-400 line-clamp-2'>
+            <p className='text-xs sm:text-sm text-gray-400 line-clamp-2 break-words'>
               {
                 ingredients.map((ingredient) => 
                 ingredient.name).join(',')

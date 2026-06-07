@@ -24,18 +24,18 @@ export const ChooseProductForm: React.FC<Props> = ({
     className,
 }) => {
   return (
-  <div className={cn(className, 'flex flex-col lg:flex-row flex-1')}>
+  <div className={cn(className, 'flex min-h-0 flex-1 flex-col lg:min-h-[500px] lg:flex-row')}>
     {/* Изображение продукта */}
-    <div className='flex items-center justify-center flex-1 relative w-full p-4 sm:p-6 md:p-8 lg:p-0'>
+    <div className='relative flex w-full flex-1 items-center justify-center p-4 sm:p-6 md:p-8 lg:min-w-0 lg:p-0'>
         <img
           src={imageUrl}
           alt={name}
-          className='relative left-2 top-2 transition-all z-10 duration-300 w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] mx-auto'
+          className='relative left-2 top-2 z-10 mx-auto h-[200px] w-[200px] transition-all duration-300 sm:h-[250px] sm:w-[250px] md:h-[300px] md:w-[300px] lg:h-[320px] lg:w-[320px] xl:h-[350px] xl:w-[350px]'
         />
     </div>
 
     {/* Контент */}
-    <div className='w-full lg:w-[490px] bg-[#f0efef93] p-4 sm:p-5 md:p-6 lg:p-7 flex flex-col'>
+    <div className='flex w-full flex-col bg-[#f0efef93] p-4 sm:p-5 md:p-6 lg:w-[440px] lg:p-6 xl:w-[490px] xl:p-7'>
       <Title text={name} size='md' className='font-extrabold mb-2 lg:mb-1' />
 
       {/* Цена - только на мобильных и iPad */}
